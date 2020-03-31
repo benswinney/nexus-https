@@ -1,9 +1,9 @@
 FROM       sonatype/nexus3
-MAINTAINER Brad Beck <bradley.beck+docker@gmail.com>
+MAINTAINER Brad Beck <bradley.beck+docker@gmail.com> / Ben Swinney <ben.swinney@gmail.com>
 
 ENV NEXUS_SSL=${NEXUS_HOME}/etc/ssl
 ENV PUBLIC_CERT=${NEXUS_SSL}/cacert.pem \
-    PUBLIC_CERT_SUBJ=/CN=localhost \
+    PUBLIC_CERT_SUBJ=/CN=registry.home.swinney.io \
     PRIVATE_KEY=${NEXUS_SSL}/cakey.pem \
     PRIVATE_KEY_PASSWORD=password
 
@@ -11,8 +11,10 @@ ARG GOSU_VERSION=1.11
 
 USER root
 
-RUN sed -e '/^enabled=1/ s/=1/=0/' -i /etc/yum/pluginconf.d/subscription-manager.conf \
- && yum -y update && yum install -y openssl libxml2 libxslt && yum clean all
+RUN sed -e '/^enabled=1/ s/=1/=0/' -i /etc/yum/pluginconf.d/subscription-manager.conf && \
+    yum -y update && \
+    yum install -y openssl libxml2 libxslt && \
+    yum clean all
 
 RUN set -eux;\
     curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
@@ -33,7 +35,8 @@ application-port-ssl=8443\
     -i ${NEXUS_HOME}/etc/nexus-default.properties
 
 COPY entrypoint.sh ${NEXUS_HOME}/entrypoint.sh
-RUN chown nexus:nexus ${NEXUS_HOME}/entrypoint.sh && chmod a+x ${NEXUS_HOME}/entrypoint.sh
+RUN chown nexus:nexus ${NEXUS_HOME}/entrypoint.sh && \
+    chmod a+x ${NEXUS_HOME}/entrypoint.sh
 
 VOLUME [ "${NEXUS_SSL}" ]
 
