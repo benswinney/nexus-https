@@ -1,15 +1,19 @@
 [![DockerHub Badge](http://dockeri.co/image/bradbeck/nexus-https)](https://hub.docker.com/r/bradbeck/nexus-https/)
 
-A Dockerfile for Sonatype Nexus Repository Manager 3 with HTTPS support, based on CentOS.
+[![DockerHub Badge](http://dockeri.co/image/benswinney/nexus-https)](https://hub.docker.com/r/benswinney/nexus-https/)
+
+A Dockerfile for Sonatype Nexus Repository Manager 3 with HTTPS support, based on CentOS and UBI8
 
 GitHub Repository: https://github.com/bradbeck/nexus-https
+
+GitHub Repository for UBI8 : https://github.com/benswinney/nexus-https
 
 This Dockerfile is loosely based on the following, please refer to it for additional configuration information: https://github.com/sonatype/docker-nexus3
 
 To run, generating a default `keystore.jks`.
 
 ```
-docker run -p 8443:8443 bradbeck/nexus-https
+docker run -p 8443:8443 bradbeck/nexus-https OR docker run -p 8443:8443 benswinney/nexus-https
 ```
 
 To run, binding the exposed ports (8081, 8443), data directory, and volume containing `keystore.jks`.
