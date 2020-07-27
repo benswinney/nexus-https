@@ -1,4 +1,4 @@
-FROM       sonatype/nexus3
+FROM       sonatype/nexus3:latest
 MAINTAINER Brad Beck <bradley.beck+docker@gmail.com> / Ben Swinney <ben.swinney@gmail.com>
 
 ENV NEXUS_SSL=${NEXUS_HOME}/etc/ssl
@@ -7,7 +7,7 @@ ENV PUBLIC_CERT=${NEXUS_SSL}/cacert.pem \
     PRIVATE_KEY=${NEXUS_SSL}/cakey.pem \
     PRIVATE_KEY_PASSWORD=password
 
-ARG GOSU_VERSION=1.11
+ARG GOSU_VERSION=1.12
 
 USER root
 
@@ -35,12 +35,14 @@ application-port-ssl=8443\
     -i ${NEXUS_HOME}/etc/nexus-default.properties
 
 COPY entrypoint.sh ${NEXUS_HOME}/entrypoint.sh
+
 RUN chown nexus:nexus ${NEXUS_HOME}/entrypoint.sh && \
     chmod a+x ${NEXUS_HOME}/entrypoint.sh
 
 VOLUME [ "${NEXUS_SSL}" ]
 
-EXPOSE 8443
+EXPOSE 8443 8081 5000 5001
+
 WORKDIR ${NEXUS_HOME}
 
 ENTRYPOINT [ "./entrypoint.sh" ]
